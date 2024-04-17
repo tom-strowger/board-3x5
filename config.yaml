@@ -1,0 +1,410 @@
+units:
+  # Size of each key. cx and cy for choc, u and U for MX.
+  kx: u
+  ky: U
+  # key spread and padding
+  px: 1.04kx
+  py: 1.04ky
+  # From that, get the spacing between keys
+  ksx: px-kx
+  ksy: py-ky
+  lpx: px + 1
+  
+  # Stagger for all of the different columns
+  stagger1: py # ring column one key above the pinky column
+  stagger2: 0.3py # middle column .3 key above the ring column
+  stagger3: -0.6py # index
+  stagger4: -0.2py # inner
+
+  xiao_length: 21
+  xiao_width: 17.78
+points:
+  key:
+    spread: 1px
+    padding: 1py
+  zones:
+    matrix:
+      columns:
+        pinky:
+          key:
+            column_net: "L_P5"
+          key.mirror:
+            column_net: "R_P5"
+        ring:
+          key:
+            stagger: stagger1
+            column_net: "L_P3"
+          key.mirror:
+            column_net: "R_P3"
+        middle:
+          key:
+            stagger: stagger2
+            column_net: "L_P2"
+          key.mirror:
+            column_net: "R_P2"
+        index:
+          key:
+            stagger: stagger3
+            column_net: "L_P1"
+          key.mirror:
+            column_net: "R_P1"
+        inner:
+          key:
+            stagger: stagger4
+            column_net: "L_P0"
+          key.mirror:
+            column_net: "R_P0"
+      rows:
+        bottom:
+          row_net: "L_P10"
+        bottom.mirror:
+          row_net: "R_P10"
+        home:
+          row_net: "L_P9"
+        home.mirror:
+          row_net: "R_P9"
+        top:
+          row_net: "L_P8"
+        top.mirror:
+          row_net: "R_P8"
+    thumbfan:
+      anchor:
+        ref: matrix_index_bottom
+        shift: [-kx/2, -py-3]
+      columns:
+        inner:
+          key:
+            column_net: "L_P2"
+            splay: 0
+          key.mirror:
+            column_net: "R_P2"
+        middle:
+          key:
+            column_net: "L_P1"
+            splay: -18
+            adjust.shift: [3.5, -2.8]
+          key.mirror:
+            column_net: "R_P1"
+        home:
+          key:
+            column_net: "L_P0"
+            splay: -18
+            adjust.shift: [8, -4]
+          key.mirror:
+            column_net: "R_P0"
+      rows:
+        thumb:
+          row_net: "L_P4"
+        thumb.mirror:
+          row_net: "R_P4"
+  mirror: &mirror
+    ref: thumbfan_home_thumb
+    distance: 2.5kx
+
+outlines:
+  _l_screws:
+    -   &circle
+        what: circle
+        radius: 1.1
+        adjust:
+            ref: matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
+
+  _r_screws:
+    -   &circle
+        what: circle
+        radius: 1.1
+        adjust:
+            ref: mirror_matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
+  board_noround:
+    keys:
+      what: rectangle
+      where: true
+      size: [lpx, py]
+    l_mcu:
+      what: polygon
+      points:
+        - ref: matrix_middle_top # Top left
+          shift: [-2px-0.5lpx, 0.5py]
+        - ref: matrix_middle_top # Top right
+          shift: [0, 0.5py]
+        - ref: matrix_middle_top # Bottom right (in board)
+          shift: [0, -1py]
+        - ref: matrix_middle_top # Bottom left
+          shift: [-2px-0.5lpx, -1py]
+    l_join:
+      what: polygon
+      points:
+        - ref: matrix_pinky_home # top left of this key
+          shift: [-0.5lpx, 0.5py]
+        - ref: matrix_pinky_bottom # Bottom right of this key
+          shift: [0.5lpx, -0.5py]
+        - ref: thumbfan_inner_thumb # left of this key
+          shift: [-0.5lpx, 0]
+          affect: x
+        - ref: thumbfan_middle_thumb # bottom left of this key
+          shift: [-0.5px, -0.5py]
+        - ref: thumbfan_home_thumb # bottom left of this key
+          shift: [-0.5px, -0.5py]
+        - ref: thumbfan_home_thumb # top right of this key
+          shift: [-0.5px, 0.5py]
+        - ref: matrix_inner_bottom # Bottom right of this key
+          shift: [0.5lpx, -0.5py]
+        - ref: matrix_inner_bottom # top right of this key
+          shift: [0.5lpx, 0.5py]
+    r_join:
+      what: polygon
+      points:
+        - ref: mirror_matrix_pinky_home # top right of this key
+          shift: [0.5lpx, 0.5py]
+        - ref: mirror_matrix_pinky_bottom # Bottom left of this key
+          shift: [-0.5lpx, -0.5py]
+        - ref: mirror_thumbfan_inner_thumb # right of this key
+          shift: [-0.5lpx, 0]
+          affect: x
+        - ref: mirror_thumbfan_middle_thumb # bottom right of this key
+          shift: [0.5px, -0.5py]
+        - ref: mirror_thumbfan_home_thumb # bottom right of this key
+          shift: [0.5px, -0.5py]
+        - ref: mirror_thumbfan_home_thumb # top left of this key
+          shift: [-0.5px, 0.5py]
+        - ref: mirror_matrix_inner_bottom # Bottom left of this key
+          shift: [0.5lpx, -0.5py]
+        - ref: mirror_matrix_inner_bottom # top left of this key
+          shift: [-0.5lpx, 0.5py]
+    r_mcu:
+      what: polygon
+      points:
+        - ref: mirror_matrix_middle_top # Top right
+          shift: [0, 0.5py]
+        - ref: mirror_matrix_pinky_home
+          shift: [-0.5lpx,0]
+          affect: x
+        - ref: mirror_matrix_pinky_home
+          shift: [0, -1py]
+          affect: y
+    # logo:
+    #   what: polygon
+    #   points:
+    #     - ref: matrix_pinky_bottom # Top left (in board)
+    #       shift: [0, py]
+    #     - ref: matrix_pinky_bottom # Top right (in board)
+    #       shift: [2px, py]
+    #     - ref: matrix_pinky_bottom # Bottom right (in board)
+    #       shift: [2px, -0.5py]
+    #     - ref: matrix_pinky_bottom # Bottom left (in board)
+    #       shift: [0, -0.5py]
+
+  board:
+    - what: outline
+      name: board_noround
+      fillet: 1
+    - what: outline
+      name: _l_screws
+      operation: subtract
+    - what: outline
+      name: _r_screws
+      operation: subtract
+
+  top_plate_base:
+    keys:
+      what: polygon
+      points:
+        - ref: matrix_pinky_top
+          shift: [-0.5kx, 0.5ky]
+        - ref: matrix_pinky_top
+          shift: [0.5kx+ksx, 0.5ky]
+        - ref: matrix_ring_top
+          shift: [-0.5kx, 0.5ky]
+        - ref: matrix_ring_top
+          shift: [0.5kx+ksx, 0.5ky]
+        - ref: matrix_middle_top
+          shift: [-0.5kx, 0.5ky]
+        - ref: matrix_middle_top
+          shift: [0.5kx, 0.5ky]
+        - ref: matrix_index_top
+          shift: [-0.5kx-ksx, 0.5ky]
+        - ref: matrix_index_top
+          shift: [0.5kx, 0.5ky]
+        - ref: matrix_inner_top
+          shift: [-0.5kx-ksx, 0.5ky]
+        - ref: matrix_inner_top
+          shift: [0.5kx, 0.5ky]
+        - ref: thumbfan_home_thumb
+          shift: [0.5kx, -0.5ky]
+        - ref: thumbfan_middle_thumb
+          shift: [-0.5kx, -0.5ky]
+        - ref: matrix_index_bottom
+          shift: [-0.5kx, -0.5ky]
+        - ref: matrix_middle_bottom
+          shift: [0.5kx+ksx, -0.5ky]
+        - ref: matrix_middle_bottom
+          shift: [-0.5kx-ksx, -0.5ky]
+        - ref: matrix_ring_bottom
+          shift: [0.5kx, -0.5ky]
+        - ref: matrix_ring_bottom
+          shift: [-0.5kx-ksx, -0.5ky]
+        - ref: matrix_pinky_bottom
+          shift: [0.5kx, -0.5ky]
+        - ref: matrix_pinky_bottom
+          shift: [-0.5kx, -0.5ky]
+  top_plate:
+    top_plate_base:
+      what: outline
+      name: board_noround
+      fillet: 1
+    cutouts:
+      what: rectangle
+      where: true
+      size: 14
+      operation: subtract
+
+pcbs:
+  main:
+    outlines:
+      main:
+        outline: board
+    footprints:
+      keys:
+        what: mx
+        where: true
+        params:
+          keycaps: true
+          reverse: false
+          hotswap: true
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+      diode:
+        what: single_diode
+        where: true
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [0, -0.3py]
+          rotate: 180
+      l_battery_pad:
+        what: battery_pad
+        where:
+          ref: matrix_middle_bottom
+          shift: [0, -0.5py-3]
+        params:
+          plus: 'L_BAT+'
+          minus: 'L_GND'
+      r_battery_pad:
+        what: battery_pad
+        asym: clone
+        where:
+          ref: matrix_middle_bottom
+          shift: [0, -0.5py-3]
+        params:
+          plus: 'R_BAT+'
+          minus: 'R_GND'
+      l_xiao:
+        what: xiao-ble-smd-cutout
+        where:
+          ref: matrix_pinky_top
+          shift: [0.5px-0.5ksx-xiao_width/2-0.5, 0.5py+0.5ksy + (xiao_length/2)+3]
+        params:
+          VCC5: 'L_VCC5'
+          GND: 'L_GND'
+          VCC3: 'L_VCC3'
+          RST: 'L_RST'
+          RAW: 'L_RAW'
+          NFC0: 'L_NFC0'
+          NFC1: 'L_NFC1'
+          CLK: 'L_CLK'
+          DIO: 'L_DIO'
+          P0: 'L_P0'
+          P1: 'L_P1'
+          P2: 'L_P2'
+          P3: 'L_P3'
+          P4: 'L_P4'
+          P5: 'L_P5'
+          P6: 'L_P6'
+          P7: 'L_P7'
+          P8: 'L_P8'
+          P9: 'L_P9'
+          P10: 'L_P10'
+      r_xiao:
+        what: xiao-ble-smd-cutout
+        asym: clone
+        where:
+          ref: matrix_pinky_top
+          shift: [0.5px-0.5ksx-xiao_width/2-0.5, 0.5py+0.5ksy + (xiao_length/2)+3]
+        params:
+          VCC5: 'R_VCC5'
+          GND: 'R_GND'
+          VCC3: 'R_VCC3'
+          RST: 'R_RST'
+          RAW: 'R_RAW'
+          NFC0: 'R_NFC0'
+          NFC1: 'R_NFC1'
+          CLK: 'R_CLK'
+          DIO: 'R_DIO'
+          P0: 'R_P0'
+          P1: 'R_P1'
+          P2: 'R_P2'
+          P3: 'R_P3'
+          P4: 'R_P4'
+          P5: 'R_P5'
+          P6: 'R_P6'
+          P7: 'R_P7'
+          P8: 'R_P8'
+          P9: 'R_P9'
+          P10: 'R_P10'
+      l_slider_f:
+        what: slider
+        where:
+          ref: matrix_middle_top
+          shift: [-1px, 0.5px-3]
+        params:
+          from: L_BAT+
+          to: L_RAW
+          side: F
+      r_slider_f:
+        what: slider
+        where:
+          ref: mirror_matrix_middle_top
+          shift: [-1px, 0.5px-3]
+        params:
+          from: R_BAT+
+          to: R_RAW
+          side: F
+  top_plate:
+    outlines:
+      top_plate:
+        outline: top_plate
