@@ -3,6 +3,7 @@
     "gen": "ergogen -d ."
   },
   "dependencies": {
+    "@jscad/csg": "^0.7.0",
     "ergogen": "^4.0.4"
   }
 }

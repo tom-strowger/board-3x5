@@ -16,6 +16,9 @@ units:
   stagger3: -0.6py # index
   stagger4: -0.2py # inner
 
+  # Case thickness
+  ct: 1.5
+
   xiao_length: 21
   xiao_width: 17.78
 points:
@@ -125,11 +128,58 @@ outlines:
         adjust:
             ref: thumbfan_middle_thumb
             shift: [0.5cx, 0.5cy]
+  
+  _l_screws_xl:
+    -   &circle
+        what: circle
+        radius: 2.2
+        adjust:
+            ref: matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
 
   _r_screws:
     -   &circle
         what: circle
         radius: 1.1
+        adjust:
+            ref: mirror_matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
+  _r_screws_xl:
+    -   &circle
+        what: circle
+        radius: 2.2
         adjust:
             ref: mirror_matrix_ring_top
             shift: [-0.5px, -0.5py]
@@ -305,6 +355,20 @@ outlines:
     - what: outline
       name: _r_screws
       operation: subtract
+  
+  screw_bores:
+    - what: outline
+      name: _l_screws_xl
+      operation: add
+    - what: outline
+      name: _r_screws_xl
+      operation: add
+    - what: outline
+      name: _l_screws
+      operation: subtract
+    - what: outline
+      name: _r_screws
+      operation: subtract
 
   top_plate_base:
     keys:
@@ -348,6 +412,48 @@ outlines:
           shift: [0.5kx, -0.5ky]
         - ref: matrix_pinky_bottom
           shift: [-0.5kx, -0.5ky]
+  xl_top_plate_base:
+    keys:
+      what: polygon
+      points:
+        - ref: matrix_pinky_top
+          shift: [-0.5kx-ct, 0.5ky+ct]
+        - ref: matrix_pinky_top
+          shift: [0.5kx+ksx+ct, 0.5ky+ct]
+        - ref: matrix_ring_top
+          shift: [-0.5kx-ct, 0.5ky+ct]
+        - ref: matrix_ring_top
+          shift: [0.5kx+ksx+ct, 0.5ky+ct]
+        - ref: matrix_middle_top
+          shift: [-0.5kx-ct, 0.5ky+ct]
+        - ref: matrix_middle_top
+          shift: [0.5kx+ct, 0.5ky+ct]
+        - ref: matrix_index_top
+          shift: [-0.5kx-ksx-ct, 0.5ky+ct]
+        - ref: matrix_index_top
+          shift: [0.5kx+ct, 0.5ky+ct]
+        - ref: matrix_inner_top
+          shift: [-0.5kx-ksx-ct, 0.5ky+ct]
+        - ref: matrix_inner_top
+          shift: [0.5kx+ct, 0.5ky+ct]
+        - ref: thumbfan_home_thumb
+          shift: [0.5kx+ct, -0.5ky-ct]
+        - ref: thumbfan_middle_thumb
+          shift: [-0.5kx-ct, -0.5ky-ct]
+        - ref: matrix_index_bottom
+          shift: [-0.5kx-ct, -0.5ky-ct]
+        - ref: matrix_middle_bottom
+          shift: [0.5kx+ksx+ct, -0.5ky-ct]
+        - ref: matrix_middle_bottom
+          shift: [-0.5kx-ksx-ct, -0.5ky-ct]
+        - ref: matrix_ring_bottom
+          shift: [0.5kx+ct, -0.5ky-ct]
+        - ref: matrix_ring_bottom
+          shift: [-0.5kx-ksx-ct, -0.5ky-ct]
+        - ref: matrix_pinky_bottom
+          shift: [0.5kx+ct, -0.5ky-ct]
+        - ref: matrix_pinky_bottom
+          shift: [-0.5kx-ct, -0.5ky-ct]
   top_plate:
     top_plate_base:
       what: outline
@@ -358,6 +464,30 @@ outlines:
       where: true
       size: 14
       operation: subtract
+    cutouts_screw_l:
+      what: outline
+      name: _l_screws
+      operation: subtract
+    cutouts_screw_r:
+      what: outline
+      name: _r_screws
+      operation: subtract
+  walls:
+    xl_top_plate_base:
+      what: outline
+      name: xl_top_plate_base
+      fillet: 1
+    cutouts:
+      what: outline
+      name: top_plate_base
+      operation: subtract
+      fillet: 1
+  bottom:
+    xl_top_plate_base:
+      what: outline
+      name: xl_top_plate_base
+      fillet: 1
+
 
 pcbs:
   main:
@@ -492,3 +622,25 @@ pcbs:
     outlines:
       top_plate:
         outline: top_plate
+
+cases:
+  top_case:
+    - what: outline
+      name: top_plate
+      extrude: 2.0
+      operation: add
+    - what: outline
+      name: screw_bores
+      extrude: 5.0
+      operation: add
+  bottom_case:
+    - what: outline
+      name: bottom
+      extrude: 2.0
+      operation: add
+    - what: outline
+      name: walls
+      extrude: 5.0
+      operation: add
+      
+    
