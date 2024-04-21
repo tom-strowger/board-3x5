@@ -99,7 +99,7 @@ points:
           row_net: "R_P4"
   mirror: &mirror
     ref: thumbfan_home_thumb
-    distance: 2.5kx
+    distance: 1.7kx
 
 outlines:
   _l_screws:
@@ -216,22 +216,89 @@ outlines:
         - ref: mirror_matrix_pinky_home
           shift: [0, -1py]
           affect: y
-    # logo:
-    #   what: polygon
-    #   points:
-    #     - ref: matrix_pinky_bottom # Top left (in board)
-    #       shift: [0, py]
-    #     - ref: matrix_pinky_bottom # Top right (in board)
-    #       shift: [2px, py]
-    #     - ref: matrix_pinky_bottom # Bottom right (in board)
-    #       shift: [2px, -0.5py]
-    #     - ref: matrix_pinky_bottom # Bottom left (in board)
-    #       shift: [0, -0.5py]
+
+  join_sides:
+    - what: polygon
+      points:
+        - ref: matrix_inner_home
+          shift: [0, -0.5py-4]
+        - ref: matrix_inner_bottom
+        - ref: mirror_matrix_inner_bottom
+        - ref: mirror_matrix_inner_home
+          shift: [0, -0.5py-4]
+    - what: polygon
+      points:
+        - ref: matrix_inner_top
+          shift: [0, -4]
+        - ref: matrix_inner_top
+          shift: [0, -0.5py]
+        - ref: mirror_matrix_inner_top
+          shift: [0, -0.5py]
+        - ref: mirror_matrix_inner_top
+          shift: [0, -4]
+  join_sides_break:
+    -   &circle
+        what: circle
+        radius: 0.6
+        adjust:
+            ref: matrix_inner_top
+            shift: [0.55px, -4.9]
+    -   <<: *circle
+        adjust:
+            ref: matrix_inner_top
+            shift: [0.55px, -6.9]
+    -   <<: *circle
+        adjust:
+            ref: matrix_inner_top
+            shift: [0.55px, -8.9]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_inner_top
+            shift: [0.55px, -4.9]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_inner_top
+            shift: [0.55px, -6.9]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_inner_top
+            shift: [0.55px, -8.9]
+
+    -   <<: *circle
+        adjust:
+            ref: matrix_inner_home
+            shift: [0.55px, -0.5py-4.9]
+    -   <<: *circle
+        adjust:
+            ref: matrix_inner_home
+            shift: [0.55px, -0.5py-6.9]
+    -   <<: *circle
+        adjust:
+            ref: matrix_inner_home
+            shift: [0.55px, -0.5py-8.9]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_inner_home
+            shift: [0.55px, -0.5py-4.9]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_inner_home
+            shift: [0.55px, -0.5py-6.9]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_inner_home
+            shift: [0.55px, -0.5py-8.9]
 
   board:
     - what: outline
       name: board_noround
       fillet: 1
+    - what: outline
+      name: join_sides
+      operation: add
+    - what: outline
+      name: join_sides_break
+      operation: subtract
     - what: outline
       name: _l_screws
       operation: subtract
@@ -324,6 +391,14 @@ pcbs:
         params:
           plus: 'L_BAT+'
           minus: 'L_GND'
+      l_battery_thru:
+        what: battery_thru_hole
+        where:
+          ref: matrix_middle_bottom
+          shift: [0, -0.5py-4]
+        params:
+          plus: 'L_BAT+'
+          minus: 'L_GND'
       r_battery_pad:
         what: battery_pad
         asym: clone
@@ -333,11 +408,20 @@ pcbs:
         params:
           plus: 'R_BAT+'
           minus: 'R_GND'
+      r_battery_thru:
+        what: battery_thru_hole
+        asym: clone
+        where:
+          ref: matrix_middle_bottom
+          shift: [0, -0.5py-4]
+        params:
+          plus: 'R_BAT+'
+          minus: 'R_GND'
       l_xiao:
         what: xiao-ble-smd-cutout
         where:
           ref: matrix_pinky_top
-          shift: [0.5px-0.5ksx-xiao_width/2-0.5, 0.5py+0.5ksy + (xiao_length/2)+3]
+          shift: [0.5px-0.5ksx-xiao_width/2-0.5, 0.5py+0.5ksy + (xiao_length/2)+3.5]
         params:
           VCC5: 'L_VCC5'
           GND: 'L_GND'
@@ -364,7 +448,7 @@ pcbs:
         asym: clone
         where:
           ref: matrix_pinky_top
-          shift: [0.5px-0.5ksx-xiao_width/2-0.5, 0.5py+0.5ksy + (xiao_length/2)+3]
+          shift: [0.5px-0.5ksx-xiao_width/2-0.5, 0.5py+0.5ksy + (xiao_length/2)+3.5]
         params:
           VCC5: 'R_VCC5'
           GND: 'R_GND'
