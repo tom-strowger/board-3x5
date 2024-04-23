@@ -16,8 +16,12 @@ units:
   stagger3: -0.6py # index
   stagger4: -0.2py # inner
 
+  # Case space
+  cs: 1.0
   # Case thickness
   ct: 1.5
+
+  pcb_thickness: 1.6
 
   xiao_length: 21
   xiao_width: 17.78
@@ -102,7 +106,7 @@ points:
           row_net: "R_P4"
   mirror: &mirror
     ref: thumbfan_home_thumb
-    distance: 1.7kx
+    distance: 2kx
 
 outlines:
   _l_screws:
@@ -412,48 +416,19 @@ outlines:
           shift: [0.5kx, -0.5ky]
         - ref: matrix_pinky_bottom
           shift: [-0.5kx, -0.5ky]
-  xl_top_plate_base:
-    keys:
-      what: polygon
-      points:
-        - ref: matrix_pinky_top
-          shift: [-0.5kx-ct, 0.5ky+ct]
-        - ref: matrix_pinky_top
-          shift: [0.5kx+ksx+ct, 0.5ky+ct]
-        - ref: matrix_ring_top
-          shift: [-0.5kx-ct, 0.5ky+ct]
-        - ref: matrix_ring_top
-          shift: [0.5kx+ksx+ct, 0.5ky+ct]
-        - ref: matrix_middle_top
-          shift: [-0.5kx-ct, 0.5ky+ct]
-        - ref: matrix_middle_top
-          shift: [0.5kx+ct, 0.5ky+ct]
-        - ref: matrix_index_top
-          shift: [-0.5kx-ksx-ct, 0.5ky+ct]
-        - ref: matrix_index_top
-          shift: [0.5kx+ct, 0.5ky+ct]
-        - ref: matrix_inner_top
-          shift: [-0.5kx-ksx-ct, 0.5ky+ct]
-        - ref: matrix_inner_top
-          shift: [0.5kx+ct, 0.5ky+ct]
-        - ref: thumbfan_home_thumb
-          shift: [0.5kx+ct, -0.5ky-ct]
-        - ref: thumbfan_middle_thumb
-          shift: [-0.5kx-ct, -0.5ky-ct]
-        - ref: matrix_index_bottom
-          shift: [-0.5kx-ct, -0.5ky-ct]
-        - ref: matrix_middle_bottom
-          shift: [0.5kx+ksx+ct, -0.5ky-ct]
-        - ref: matrix_middle_bottom
-          shift: [-0.5kx-ksx-ct, -0.5ky-ct]
-        - ref: matrix_ring_bottom
-          shift: [0.5kx+ct, -0.5ky-ct]
-        - ref: matrix_ring_bottom
-          shift: [-0.5kx-ksx-ct, -0.5ky-ct]
-        - ref: matrix_pinky_bottom
-          shift: [0.5kx+ct, -0.5ky-ct]
-        - ref: matrix_pinky_bottom
-          shift: [-0.5kx-ct, -0.5ky-ct]
+  wall_inner:
+    top_plate_base:
+      what: outline
+      name: board_noround
+      fillet: 1
+      expand: cs
+  wall_outer:
+    top_plate_base:
+      what: outline
+      name: wall_inner
+      fillet: 1
+      expand: ct
+
   top_plate:
     top_plate_base:
       what: outline
@@ -473,21 +448,76 @@ outlines:
       name: _r_screws
       operation: subtract
   walls:
-    xl_top_plate_base:
+    outside:
       what: outline
-      name: xl_top_plate_base
+      name: wall_outer
       fillet: 1
-    cutouts:
+    inside:
       what: outline
-      name: top_plate_base
+      name: wall_inner
       operation: subtract
       fillet: 1
   bottom:
     xl_top_plate_base:
       what: outline
-      name: xl_top_plate_base
+      name: wall_outer
       fillet: 1
 
+  l_usb_conn:
+    box:
+      what: polygon
+      points:
+        - ref: matrix_ring_top
+          shift: [-19.6 - 5, 0]   # todo: confirm dimensions
+        - ref: matrix_ring_top
+          shift: [-19.6 + 5, 0]
+        - ref: matrix_ring_top
+          shift: [-19.6 + 5, 2ky]
+        - ref: matrix_ring_top
+          shift: [-19.6 - 5, 2ky]
+      asym: both
+
+  l_switch:
+    box:
+      what: polygon
+      points:
+        - ref: matrix_ring_top
+          shift: [-5, 0]          # todo: confirm dimensions
+        - ref: matrix_ring_top
+          shift: [ 5, 0]
+        - ref: matrix_ring_top
+          shift: [5, 2ky]
+        - ref: matrix_ring_top
+          shift: [-5, 2ky]
+      asym: both
+
+  r_usb_conn:
+    box:
+      what: polygon
+      points:
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 - 5, 0]   # todo: confirm dimensions
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 + 5, 0]
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 + 5, 2ky]
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 - 5, 2ky]
+      asym: both
+
+  r_switch:
+    box:
+      what: polygon
+      points:
+        - ref: mirror_matrix_ring_top
+          shift: [-5, 0]          # todo: confirm dimensions
+        - ref: mirror_matrix_ring_top
+          shift: [ 5, 0]
+        - ref: mirror_matrix_ring_top
+          shift: [5, 2ky]
+        - ref: mirror_matrix_ring_top
+          shift: [-5, 2ky]
+      asym: both
 
 pcbs:
   main:
@@ -627,7 +657,7 @@ cases:
   top_case:
     - what: outline
       name: top_plate
-      extrude: 2.0
+      extrude: ct
       operation: add
     - what: outline
       name: screw_bores
@@ -636,11 +666,44 @@ cases:
   bottom_case:
     - what: outline
       name: bottom
-      extrude: 2.0
+      extrude: ct
+      operation: add
+    - what: outline
+      name: screw_bores
+      extrude: 3.5 - pcb_thickness + ct
       operation: add
     - what: outline
       name: walls
-      extrude: 5.0
+      extrude: 8.5 + ct
       operation: add
+    - what: outline
+      name: _l_screws
+      extrude: ct
+      operation: subtract
+    - what: outline
+      name: _r_screws
+      extrude: ct
+      operation: subtract
+    - what: outline
+      name: l_usb_conn
+      extrude: 3
+      operation: subtract
+      shift: [0, 0, 8.5 - 3]  # todo: confirm position
+    - what: outline
+      name: l_switch
+      extrude: 3
+      operation: subtract
+      shift: [0, 0, 8.5 - 3]  # todo: confirm position
+    - what: outline
+      name: r_usb_conn
+      extrude: 3
+      operation: subtract
+      shift: [0, 0, 8.5 - 3]  # todo: confirm position
+    - what: outline
+      name: r_switch
+      extrude: 3
+      operation: subtract
+      shift: [0, 0, 8.5 - 3]  # todo: confirm position
+    
       
     
