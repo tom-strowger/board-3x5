@@ -17,11 +17,13 @@ units:
   stagger4: -0.2py # inner
 
   # Case space
-  cs: 1.0
+  cs: 0.5
   # Case thickness
   ct: 1.5
 
   pcb_thickness: 1.6
+  pcb_space_under: 1.9
+  pcb_space_over: 5.0 - ct  # 3.5
 
   xiao_length: 21
   xiao_width: 17.78
@@ -434,6 +436,7 @@ outlines:
       what: outline
       name: board_noround
       fillet: 1
+      expand: cs + ct
     cutouts:
       what: rectangle
       where: true
@@ -648,11 +651,6 @@ pcbs:
           from: R_BAT+
           to: R_RAW
           side: F
-  top_plate:
-    outlines:
-      top_plate:
-        outline: top_plate
-
 cases:
   top_case:
     - what: outline
@@ -661,8 +659,19 @@ cases:
       operation: add
     - what: outline
       name: screw_bores
-      extrude: 5.0
+      extrude: pcb_space_over
+      shift: [0, 0, -pcb_space_over]
       operation: add
+
+    # I need to add another 1mm space for the USB as it goes into the top currently
+    - what: outline
+      name: l_usb_conn
+      extrude: 1
+      operation: subtract
+    - what: outline
+      name: r_usb_conn
+      extrude: 1
+      operation: subtract
   bottom_case:
     - what: outline
       name: bottom
@@ -670,11 +679,11 @@ cases:
       operation: add
     - what: outline
       name: screw_bores
-      extrude: 3.5 - pcb_thickness + ct
+      extrude: ct + pcb_space_under
       operation: add
     - what: outline
       name: walls
-      extrude: 8.5 + ct
+      extrude: ct + pcb_space_under + pcb_thickness + pcb_space_over
       operation: add
     - what: outline
       name: _l_screws
@@ -688,22 +697,22 @@ cases:
       name: l_usb_conn
       extrude: 3
       operation: subtract
-      shift: [0, 0, 8.5 - 3]  # todo: confirm position
+      shift: [0, 0, ct + pcb_space_under + pcb_thickness + pcb_space_over - 2]  # todo: confirm position
     - what: outline
       name: l_switch
       extrude: 3
       operation: subtract
-      shift: [0, 0, 8.5 - 3]  # todo: confirm position
+      shift: [0, 0, ct + pcb_space_under + pcb_thickness]  # todo: confirm position
     - what: outline
       name: r_usb_conn
       extrude: 3
       operation: subtract
-      shift: [0, 0, 8.5 - 3]  # todo: confirm position
+      shift: [0, 0, ct + pcb_space_under + pcb_thickness + pcb_space_over - 2]  # todo: confirm position
     - what: outline
       name: r_switch
       extrude: 3
       operation: subtract
-      shift: [0, 0, 8.5 - 3]  # todo: confirm position
+      shift: [0, 0, ct + pcb_space_under + pcb_thickness]  # todo: confirm position
     
       
     
