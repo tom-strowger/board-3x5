@@ -27,6 +27,19 @@ units:
 
   xiao_length: 21
   xiao_width: 17.78
+
+  screw_radius: 1.1
+  screw_bore_outer_radius: 2.6
+  screw_head_insert_radius: 1.8  # M2 head diameter = 3mm
+  screw_head_insert_depth: 1.3 # M2 head height = 1.1mm
+  heat_set_radius_inner: 1.5 # Inner diameter for M2xL2xOD3.2
+  heat_set_radius_outer: 2.5 # Outer diameter for M2xL2xOD3.2
+
+  feet_ring_inner_radius: 4.0
+  feet_ring_outer_radius: 4.5
+  feet_ring_height: 0.5
+
+
 points:
   key:
     spread: 1px
@@ -111,10 +124,10 @@ points:
     distance: 2kx
 
 outlines:
-  _l_screws:
+  _l_screws_inner:
     -   &circle
         what: circle
-        radius: 1.1
+        radius: screw_radius
         adjust:
             ref: matrix_ring_top
             shift: [-0.5px, -0.5py]
@@ -135,10 +148,10 @@ outlines:
             ref: thumbfan_middle_thumb
             shift: [0.5cx, 0.5cy]
   
-  _l_screws_xl:
+  _l_screws_outer:
     -   &circle
         what: circle
-        radius: 2.2
+        radius: screw_bore_outer_radius
         adjust:
             ref: matrix_ring_top
             shift: [-0.5px, -0.5py]
@@ -159,10 +172,10 @@ outlines:
             ref: thumbfan_middle_thumb
             shift: [0.5cx, 0.5cy]
 
-  _r_screws:
+  _r_screws_inner:
     -   &circle
         what: circle
-        radius: 1.1
+        radius: screw_radius
         adjust:
             ref: mirror_matrix_ring_top
             shift: [-0.5px, -0.5py]
@@ -182,10 +195,10 @@ outlines:
         adjust:
             ref: mirror_thumbfan_middle_thumb
             shift: [0.5cx, 0.5cy]
-  _r_screws_xl:
+  _r_screws_outer:
     -   &circle
         what: circle
-        radius: 2.2
+        radius: screw_bore_outer_radius
         adjust:
             ref: mirror_matrix_ring_top
             shift: [-0.5px, -0.5py]
@@ -205,6 +218,226 @@ outlines:
         adjust:
             ref: mirror_thumbfan_middle_thumb
             shift: [0.5cx, 0.5cy]
+
+  _l_heat_set_nuts_inner:
+    -   &circle
+        what: circle
+        radius: heat_set_radius_inner
+        adjust:
+            ref: matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
+  _r_heat_set_nuts_inner:
+    -   &circle
+        what: circle
+        radius: heat_set_radius_inner
+        adjust:
+            ref: mirror_matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
+  _l_heat_set_nuts_outer:
+    -   &circle
+        what: circle
+        radius: heat_set_radius_outer
+        adjust:
+            ref: matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
+  _r_heat_set_nuts_outer:
+    -   &circle
+        what: circle
+        radius: heat_set_radius_outer
+        adjust:
+            ref: mirror_matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
+  _l_screw_head_inserts:
+    -   &circle
+        what: circle
+        radius: screw_head_insert_radius
+        adjust:
+            ref: matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
+  _r_screw_head_inserts:
+    -   &circle
+        what: circle
+        radius: screw_head_insert_radius
+        adjust:
+            ref: mirror_matrix_ring_top
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_ring_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_top
+            shift: [0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_index_bottom
+            shift: [-0.5px, -0.5py]
+    -   <<: *circle
+        adjust:
+            ref: mirror_thumbfan_middle_thumb
+            shift: [0.5cx, 0.5cy]
+
+  _l_feet_inner_ring:
+    -   &circle
+        what: circle
+        radius: feet_ring_inner_radius
+        adjust:
+            ref: matrix_pinky_bottom
+    -   <<: *circle
+        adjust:
+            ref: thumbfan_home_thumb
+    -   <<: *circle
+        adjust:
+            ref: matrix_inner_top
+    -   <<: *circle
+        adjust:
+            ref: matrix_pinky_top
+            shift: [0, 1.3py]
+
+  _l_feet_outer_ring:
+    -   &circle
+        what: circle
+        radius: feet_ring_outer_radius
+        adjust:
+            ref: matrix_pinky_bottom
+    -   <<: *circle
+        adjust:
+            ref: thumbfan_home_thumb
+    -   <<: *circle
+        adjust:
+            ref: matrix_inner_top
+    -   <<: *circle
+        adjust:
+            ref: matrix_pinky_top
+            shift: [0, 1.3py]
+
+  _r_feet_inner_ring:
+    -   &circle
+        what: circle
+        radius: feet_ring_inner_radius
+        adjust:
+            ref: mirror_matrix_pinky_bottom
+    -   <<: *circle
+        adjust:
+            ref: mirror_thumbfan_home_thumb
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_inner_top
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_pinky_top
+            shift: [0, 1.3py]
+
+  _r_feet_outer_ring:
+    -   &circle
+        what: circle
+        radius: feet_ring_outer_radius
+        adjust:
+            ref: mirror_matrix_pinky_bottom
+    -   <<: *circle
+        adjust:
+            ref: mirror_thumbfan_home_thumb
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_inner_top
+    -   <<: *circle
+        adjust:
+            ref: mirror_matrix_pinky_top
+            shift: [0, 1.3py]
+
+  feet_rings:
+    - what: outline
+      name: _l_feet_outer_ring
+    - what: outline
+      name: _l_feet_inner_ring
+      operation: subtract
+    - what: outline
+      name: _r_feet_outer_ring
+    - what: outline
+      name: _r_feet_inner_ring
+      operation: subtract
+
   board_noround:
     keys:
       what: rectangle
@@ -356,25 +589,47 @@ outlines:
       name: join_sides_break
       operation: subtract
     - what: outline
-      name: _l_screws
+      name: _l_screws_inner
       operation: subtract
     - what: outline
-      name: _r_screws
+      name: _r_screws_inner
       operation: subtract
   
   screw_bores:
     - what: outline
-      name: _l_screws_xl
+      name: _l_screws_outer
       operation: add
     - what: outline
-      name: _r_screws_xl
+      name: _r_screws_outer
       operation: add
     - what: outline
-      name: _l_screws
+      name: _l_screws_inner
       operation: subtract
     - what: outline
-      name: _r_screws
+      name: _r_screws_inner
       operation: subtract
+
+  heat_set_bores:
+    - what: outline
+      name: _l_heat_set_nuts_outer
+      operation: add
+    - what: outline
+      name: _r_heat_set_nuts_outer
+      operation: add
+    - what: outline
+      name: _l_heat_set_nuts_inner
+      operation: subtract
+    - what: outline
+      name: _r_heat_set_nuts_inner
+      operation: subtract
+
+  screw_head_inserts:
+    - what: outline
+      name: _l_screw_head_inserts
+      operation: add
+    - what: outline
+      name: _r_screw_head_inserts
+      operation: add
 
   top_plate_base:
     keys:
@@ -442,14 +697,14 @@ outlines:
       where: true
       size: 14
       operation: subtract
-    cutouts_screw_l:
-      what: outline
-      name: _l_screws
-      operation: subtract
-    cutouts_screw_r:
-      what: outline
-      name: _r_screws
-      operation: subtract
+    # cutouts_screw_l:
+    #   what: outline
+    #   name: _l_screws
+    #   operation: subtract
+    # cutouts_screw_r:
+    #   what: outline
+    #   name: _r_screws
+    #   operation: subtract
   walls:
     outside:
       what: outline
@@ -471,14 +726,36 @@ outlines:
       what: polygon
       points:
         - ref: matrix_ring_top
-          shift: [-19.6 - 5, 0]   # todo: confirm dimensions
+          shift: [-19.6 - 5, 8]   # todo: confirm dimensions
         - ref: matrix_ring_top
-          shift: [-19.6 + 5, 0]
+          shift: [-19.6 + 5, 8]
         - ref: matrix_ring_top
           shift: [-19.6 + 5, 2ky]
         - ref: matrix_ring_top
           shift: [-19.6 - 5, 2ky]
-      asym: both
+
+  l_usb_conn_reinforcement:
+    reinforce:
+      what: polygon
+      points:
+        - ref: matrix_ring_top
+          shift: [-19.6 - 7, 4]   # todo: confirm dimensions
+        - ref: matrix_ring_top
+          shift: [-19.6 + 7, 2]
+        - ref: matrix_ring_top
+          shift: [-19.6 + 8, 12]
+        - ref: matrix_ring_top
+          shift: [-19.6 + 8, 2ky]
+        - ref: matrix_ring_top
+          shift: [-19.6 - 8, 2ky]
+        - ref: matrix_ring_top
+          shift: [-19.6 - 8, 12]
+      fillet: 2
+    bounding_box:
+      what: outline
+      name: top_plate
+      operation: intersect
+
 
   l_switch:
     box:
@@ -499,14 +776,35 @@ outlines:
       what: polygon
       points:
         - ref: mirror_matrix_ring_top
-          shift: [-19.6 - 5, 0]   # todo: confirm dimensions
+          shift: [-19.6 - 5, 8]   # todo: confirm dimensions
         - ref: mirror_matrix_ring_top
-          shift: [-19.6 + 5, 0]
+          shift: [-19.6 + 5, 8]
         - ref: mirror_matrix_ring_top
           shift: [-19.6 + 5, 2ky]
         - ref: mirror_matrix_ring_top
           shift: [-19.6 - 5, 2ky]
-      asym: both
+
+  r_usb_conn_reinforcement:
+    reinforce:
+      what: polygon
+      points:
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 - 7, 4]   # todo: confirm dimensions
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 + 7, 2]
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 + 8, 12]
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 + 8, 2ky]
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 - 8, 2ky]
+        - ref: mirror_matrix_ring_top
+          shift: [-19.6 - 8, 12]
+      fillet: 2
+    bounding_box:
+      what: outline
+      name: top_plate
+      operation: intersect
 
   r_switch:
     box:
@@ -657,13 +955,20 @@ cases:
       name: top_plate
       extrude: ct
       operation: add
+
+    # - what: outline
+    #   name: screw_bores
+    #   extrude: pcb_space_over
+    #   shift: [0, 0, -pcb_space_over]
+    #   operation: add
+
+    # Add the bores for the heat set nuts underneath
     - what: outline
-      name: screw_bores
+      name: heat_set_bores
       extrude: pcb_space_over
       shift: [0, 0, -pcb_space_over]
       operation: add
 
-    # I need to add another 1mm space for the USB as it goes into the top currently
     - what: outline
       name: l_usb_conn
       extrude: 1
@@ -672,6 +977,20 @@ cases:
       name: r_usb_conn
       extrude: 1
       operation: subtract
+
+    # Add extra case thickness above where the usb connection is to meet minimum thickness
+    - what: outline
+      name: l_usb_conn_reinforcement
+      shift: [0, 0, ct]
+      extrude: ct - 1
+      operation: add
+    - what: outline
+      name: r_usb_conn_reinforcement
+      shift: [0, 0, ct]
+      extrude: ct - 1
+      operation: add
+
+
   bottom_case:
     - what: outline
       name: bottom
@@ -686,33 +1005,41 @@ cases:
       extrude: ct + pcb_space_under + pcb_thickness + pcb_space_over
       operation: add
     - what: outline
-      name: _l_screws
+      name: screw_head_inserts
+      extrude: screw_head_insert_depth
+      operation: subtract
+    - what: outline
+      name: _l_screws_inner
       extrude: ct
       operation: subtract
     - what: outline
-      name: _r_screws
+      name: _r_screws_inner
       extrude: ct
       operation: subtract
     - what: outline
       name: l_usb_conn
       extrude: 3
       operation: subtract
-      shift: [0, 0, ct + pcb_space_under + pcb_thickness + pcb_space_over - 2]  # todo: confirm position
+      shift: [0, 0, ct + pcb_space_under + pcb_thickness + pcb_space_over - 2]
     - what: outline
       name: l_switch
       extrude: 3
       operation: subtract
-      shift: [0, 0, ct + pcb_space_under + pcb_thickness]  # todo: confirm position
+      shift: [0, 0, ct + pcb_space_under + pcb_thickness - 1.5 + 0.15/2 ]  # 3mm gap centred about the switch position, switch is 0.15 thick above pcb
     - what: outline
       name: r_usb_conn
       extrude: 3
       operation: subtract
-      shift: [0, 0, ct + pcb_space_under + pcb_thickness + pcb_space_over - 2]  # todo: confirm position
+      shift: [0, 0, ct + pcb_space_under + pcb_thickness + pcb_space_over - 2]
     - what: outline
       name: r_switch
       extrude: 3
       operation: subtract
-      shift: [0, 0, ct + pcb_space_under + pcb_thickness]  # todo: confirm position
+      shift: [0, 0, ct + pcb_space_under + pcb_thickness - 1.5 + 0.15/2] # 3mm gap centred about the switch position, switch is 0.15 thick above pcb
+    - what: outline
+      name: feet_rings
+      extrude: feet_ring_height
+      operation: add
+      shift: [0, 0, -feet_ring_height]
     
-      
     
