@@ -22,7 +22,7 @@ units:
   ct: 1.5
 
   pcb_thickness: 1.6
-  pcb_space_under: 1.9
+  pcb_space_under: 3.5 # battery is 3mm high
   pcb_space_over: 5.0 - ct  # 3.5
 
   xiao_length: 21
@@ -38,6 +38,9 @@ units:
   feet_ring_inner_radius: 4.0
   feet_ring_outer_radius: 4.5
   feet_ring_height: 0.5
+
+  battery_width: 12.0
+  battery_length: 30.0
 
 
 points:
@@ -124,6 +127,24 @@ points:
     distance: 2kx
 
 outlines:
+
+  battery_border_inner:
+    -   what: rectangle
+        adjust:
+          ref: matrix_ring_bottom
+          shift: [0.25px, -py]
+        size: [battery_length, battery_width]
+  battery_border_outer:
+    -   what: outline
+        name: battery_border_inner
+        expand: 1
+  batter_border:
+    - what: outline
+      name: battery_border_outer
+      operation: add
+    - what: outline
+      name: battery_border_inner
+      operation: subtract
   _l_screws_inner:
     -   &circle
         what: circle
@@ -697,14 +718,7 @@ outlines:
       where: true
       size: 14
       operation: subtract
-    # cutouts_screw_l:
-    #   what: outline
-    #   name: _l_screws
-    #   operation: subtract
-    # cutouts_screw_r:
-    #   what: outline
-    #   name: _r_screws
-    #   operation: subtract
+
   walls:
     outside:
       what: outline
@@ -956,12 +970,6 @@ cases:
       extrude: ct
       operation: add
 
-    # - what: outline
-    #   name: screw_bores
-    #   extrude: pcb_space_over
-    #   shift: [0, 0, -pcb_space_over]
-    #   operation: add
-
     # Add the bores for the heat set nuts underneath
     - what: outline
       name: heat_set_bores
@@ -1041,5 +1049,9 @@ cases:
       extrude: feet_ring_height
       operation: add
       shift: [0, 0, -feet_ring_height]
+    - what: outline
+      name: batter_border
+      extrude: ct + 1
+      operation: add
     
     
