@@ -8,8 +8,8 @@
 set -e
 
 # Check arguments
-if [[ "$1" != "once" && "$1" != "" ]]; then
-	echo "Usage: ./dev.sh [once]"
+if [[ "$1" != "once" && "$1" != "cases" && "$1" != "" ]]; then
+	echo "Usage: $0 [once] [cases]"
 	exit 1
 fi
 
@@ -17,24 +17,40 @@ OUTPUT_DIR=output
 
 pcbnew_pid=
 
-build() {
-	node_modules/ergogen/src/cli.js . -o $OUTPUT_DIR && \
-        {
-            killall pcbnew || true
-            rm -rf $OUTPUT_DIR/pcbs/\~main.kicad_pcb.lck
-            
-            pcbnew $OUTPUT_DIR/pcbs/main.kicad_pcb &
-            pcbnew_pid=$!
-        } || true
+open_pcb() {
+    killall pcbnew || true
+    rm -rf $OUTPUT_DIR/pcbs/\~main.kicad_pcb.lck
+    
+    pcbnew $OUTPUT_DIR/pcbs/main.kicad_pcb &
+    pcbnew_pid=$!
+} 
+
+convert_cases() {
+    # Convert the cases to the correct format
+    for case in output/cases/*.jscad; do
+        npx @jscad/cli@1 $case
+    done
 }
 
+build() {
+	node_modules/ergogen/src/cli.js . -o $OUTPUT_DIR
+}
 
-build
+if [[ "$1" == "cases" ]]; then
+    build  && \
+        convert_cases
+	exit 0
+fi
+
+build  && \
+    open_pcb || true
 
 if [[ "$1" == "once" ]]; then
 	exit 0
 fi
 
 while true; do
-	fswatch config.yaml footprints/ | build
+	fswatch config.yaml footprints/ | 
+        build  && \
+        open_pcb || true
 done

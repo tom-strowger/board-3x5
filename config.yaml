@@ -128,23 +128,42 @@ points:
 
 outlines:
 
-  battery_border_inner:
+  battery_border_inner_l:
     -   what: rectangle
         adjust:
           ref: matrix_ring_bottom
           shift: [0.25px, -py]
         size: [battery_length, battery_width]
-  battery_border_outer:
+  battery_border_outer_l:
     -   what: outline
-        name: battery_border_inner
+        name: battery_border_inner_l
         expand: 1
-  batter_border:
+  battery_border_l:
     - what: outline
-      name: battery_border_outer
+      name: battery_border_outer_l
       operation: add
     - what: outline
-      name: battery_border_inner
+      name: battery_border_inner_l
       operation: subtract
+
+  battery_border_inner_r:
+    -   what: rectangle
+        adjust:
+          ref: mirror_matrix_ring_bottom
+          shift: [0.25px, -py]
+        size: [battery_length, battery_width]
+  battery_border_outer_r:
+    -   what: outline
+        name: battery_border_inner_r
+        expand: 1
+  battery_border_r:
+    - what: outline
+      name: battery_border_outer_r
+      operation: add
+    - what: outline
+      name: battery_border_inner_r
+      operation: subtract
+      
   _l_screws_inner:
     -   &circle
         what: circle
@@ -834,6 +853,22 @@ outlines:
           shift: [-5, 2ky]
       asym: both
 
+  bounding_box_l:
+    box: 
+      what: rectangle
+      adjust:
+        ref: matrix_inner_home
+        shift: [-10000/2.0+1.7kx, 0]  # this 1.7 will need to be updated if the mirror point changes
+      size: [10000, 10000]
+  
+  bounding_box_r:
+    box: 
+      what: rectangle
+      adjust:
+        ref: mirror_matrix_inner_home
+        shift: [-10000/2.0+1.7kx, 0]
+      size: [10000, 10000]
+
 pcbs:
   main:
     outlines:
@@ -998,6 +1033,23 @@ cases:
       extrude: ct - 1
       operation: add
 
+  top_case_l:
+    - what: case
+      name: top_case
+    - what: outline
+      name: bounding_box_l
+      extrude: 100
+      shift: [0, 0, -50]
+      operation: intersect
+
+  top_case_r:
+    - what: case
+      name: top_case
+    - what: outline
+      name: bounding_box_r
+      extrude: 100
+      shift: [0, 0, -50]
+      operation: intersect
 
   bottom_case:
     - what: outline
@@ -1050,8 +1102,28 @@ cases:
       operation: add
       shift: [0, 0, -feet_ring_height]
     - what: outline
-      name: batter_border
+      name: battery_border_l
+      extrude: ct + 1
+      operation: add
+    - what: outline
+      name: battery_border_r
       extrude: ct + 1
       operation: add
     
-    
+  bottom_case_l:
+    - what: case
+      name: bottom_case
+    - what: outline
+      name: bounding_box_l
+      extrude: 100
+      shift: [0, 0, -50]
+      operation: intersect
+
+  bottom_case_r:
+    - what: case
+      name: bottom_case
+    - what: outline
+      name: bounding_box_r
+      extrude: 100
+      shift: [0, 0, -50]
+      operation: intersect
