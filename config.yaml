@@ -16,10 +16,13 @@ units:
   stagger3: -0.6py # index
   stagger4: -0.2py # inner
 
-  # Case space
+  # Case space, between pcb and walls
   cs: 0.5
-  # Case thickness
+  # Case thickness, of walls
   ct: 1.5
+  # The amount the bottom overlaps the walls
+  bottom_overlap: 0.5
+  bottom_case_space: 0.2  # space between bottom case and the inset walls
 
   pcb_thickness: 1.6
   pcb_space_under: 3.5 # battery is 3mm high
@@ -517,34 +520,34 @@ outlines:
     r_join:
       what: polygon
       points:
-        - ref: mirror_matrix_pinky_home # top right of this key
-          shift: [0.5lpx, 0.5py]
-        - ref: mirror_matrix_pinky_bottom # Bottom left of this key
-          shift: [-0.5lpx, -0.5py]
-        - ref: mirror_thumbfan_inner_thumb # right of this key
+        - ref: mirror_matrix_pinky_home # top left of this key
+          shift: [-0.5lpx, 0.5py]
+        - ref: mirror_matrix_pinky_bottom # Bottom right of this key
+          shift: [0.5lpx, -0.5py]
+        - ref: mirror_thumbfan_inner_thumb # left of this key
           shift: [-0.5lpx, 0]
           affect: x
-        - ref: mirror_thumbfan_middle_thumb # bottom right of this key
-          shift: [0.5px, -0.5py]
-        - ref: mirror_thumbfan_home_thumb # bottom right of this key
-          shift: [0.5px, -0.5py]
-        - ref: mirror_thumbfan_home_thumb # top left of this key
+        - ref: mirror_thumbfan_middle_thumb # bottom left of this key
+          shift: [-0.5px, -0.5py]
+        - ref: mirror_thumbfan_home_thumb # bottom left of this key
+          shift: [-0.5px, -0.5py]
+        - ref: mirror_thumbfan_home_thumb # top right of this key
           shift: [-0.5px, 0.5py]
-        - ref: mirror_matrix_inner_bottom # Bottom left of this key
+        - ref: mirror_matrix_inner_bottom # Bottom right of this key
           shift: [0.5lpx, -0.5py]
-        - ref: mirror_matrix_inner_bottom # top left of this key
-          shift: [-0.5lpx, 0.5py]
+        - ref: mirror_matrix_inner_bottom # top right of this key
+          shift: [0.5lpx, 0.5py]
     r_mcu:
       what: polygon
       points:
+        - ref: mirror_matrix_middle_top # Top left
+          shift: [-2px-0.5lpx, 0.5py]
         - ref: mirror_matrix_middle_top # Top right
           shift: [0, 0.5py]
-        - ref: mirror_matrix_pinky_home
-          shift: [-0.5lpx,0]
-          affect: x
-        - ref: mirror_matrix_pinky_home
+        - ref: mirror_matrix_middle_top # Bottom right (in board)
           shift: [0, -1py]
-          affect: y
+        - ref: mirror_matrix_middle_top # Bottom left
+          shift: [-2px-0.5lpx, -1py]
 
   join_sides:
     - what: polygon
@@ -717,14 +720,27 @@ outlines:
     top_plate_base:
       what: outline
       name: board_noround
-      fillet: 1
+      # fillet: 1
       expand: cs
   wall_outer:
     top_plate_base:
       what: outline
       name: wall_inner
-      fillet: 1
+      # fillet: 1
       expand: ct
+  bottom:
+    top_plate_base:
+      what: outline
+      name: board_noround
+      fillet: 1
+      expand: cs+bottom_overlap
+
+  bottom_gap_in_top:
+    top_plate_base:
+      what: outline
+      name: board_noround
+      fillet: 1
+      expand: cs+bottom_overlap+bottom_case_space
 
   top_plate:
     top_plate_base:
@@ -747,11 +763,6 @@ outlines:
       what: outline
       name: wall_inner
       operation: subtract
-      fillet: 1
-  bottom:
-    xl_top_plate_base:
-      what: outline
-      name: wall_outer
       fillet: 1
 
   l_usb_conn:
@@ -1005,6 +1016,19 @@ cases:
       extrude: ct
       operation: add
 
+    - what: outline
+      name: walls
+      extrude: ct + pcb_space_under + pcb_thickness + pcb_space_over
+      shift: [0, 0, -(ct + pcb_space_under + pcb_thickness + pcb_space_over)]
+      operation: add
+    
+    # Remove material where the bottom section will sit
+    - what: outline
+      name: bottom_gap_in_top
+      extrude: ct
+      shift: [0, 0, -(ct + pcb_space_under + pcb_thickness + pcb_space_over)]
+      operation: subtract
+
     # Add the bores for the heat set nuts underneath
     - what: outline
       name: heat_set_bores
@@ -1025,13 +1049,35 @@ cases:
     - what: outline
       name: l_usb_conn_reinforcement
       shift: [0, 0, ct]
-      extrude: ct - 1
+      extrude: ct - 0.8  # 0.2 extra
       operation: add
     - what: outline
       name: r_usb_conn_reinforcement
       shift: [0, 0, ct]
-      extrude: ct - 1
+      extrude: ct - 0.8  # 0.2 extra
       operation: add
+
+    - what: outline
+      name: l_usb_conn
+      extrude: 3.3
+      operation: subtract
+      shift: [0, 0, ct-3.8 ]
+    - what: outline
+      name: l_switch
+      extrude: 3
+      operation: subtract
+      shift: [0, 0, -(pcb_space_over + 1.5 - 0.15/2) ]  # 3mm gap centred about the switch position, switch is 0.15 thick above pcb
+    - what: outline
+      name: r_usb_conn
+      extrude: 3.3
+      operation: subtract
+      shift: [0, 0, ct-3.8]
+    - what: outline
+      name: r_switch
+      extrude: 3
+      operation: subtract
+      shift: [0, 0, -(pcb_space_over + 1.5 - 0.15/2)] # 3mm gap centred about the switch position, switch is 0.15 thick above pcb
+
 
   top_case_l:
     - what: case
@@ -1061,10 +1107,6 @@ cases:
       extrude: ct + pcb_space_under
       operation: add
     - what: outline
-      name: walls
-      extrude: ct + pcb_space_under + pcb_thickness + pcb_space_over
-      operation: add
-    - what: outline
       name: screw_head_inserts
       extrude: screw_head_insert_depth
       operation: subtract
@@ -1076,26 +1118,6 @@ cases:
       name: _r_screws_inner
       extrude: ct
       operation: subtract
-    - what: outline
-      name: l_usb_conn
-      extrude: 3
-      operation: subtract
-      shift: [0, 0, ct + pcb_space_under + pcb_thickness + pcb_space_over - 2]
-    - what: outline
-      name: l_switch
-      extrude: 3
-      operation: subtract
-      shift: [0, 0, ct + pcb_space_under + pcb_thickness - 1.5 + 0.15/2 ]  # 3mm gap centred about the switch position, switch is 0.15 thick above pcb
-    - what: outline
-      name: r_usb_conn
-      extrude: 3
-      operation: subtract
-      shift: [0, 0, ct + pcb_space_under + pcb_thickness + pcb_space_over - 2]
-    - what: outline
-      name: r_switch
-      extrude: 3
-      operation: subtract
-      shift: [0, 0, ct + pcb_space_under + pcb_thickness - 1.5 + 0.15/2] # 3mm gap centred about the switch position, switch is 0.15 thick above pcb
     - what: outline
       name: feet_rings
       extrude: feet_ring_height
