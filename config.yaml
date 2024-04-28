@@ -39,7 +39,7 @@ units:
   heat_set_radius_outer: 2.5 # Outer diameter for M2xL2xOD3.2
 
   feet_ring_inner_radius: 4.0
-  feet_ring_outer_radius: 4.5
+  feet_ring_outer_radius: 5.5
   feet_ring_height: 0.5
 
   battery_width: 12.0
