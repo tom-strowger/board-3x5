@@ -18,8 +18,10 @@ units:
 
   # Case space, between pcb and walls
   cs: 0.5
-  # Case thickness, of walls
+  # Case thickness
   ct: 1.5
+  # Wall thickness. This gives 1.5mm when the space is subtracted for the bottom  
+  wt: 2.2
   # The amount the bottom overlaps the walls
   bottom_overlap: 0.5
   bottom_case_space: 0.2  # space between bottom case and the inset walls
@@ -38,8 +40,8 @@ units:
   heat_set_radius_inner: 1.5 # Inner diameter for M2xL2xOD3.2
   heat_set_radius_outer: 2.5 # Outer diameter for M2xL2xOD3.2
 
-  feet_ring_inner_radius: 4.0
-  feet_ring_outer_radius: 5.5
+  feet_ring_inner_radius: 4.2  # To fit 8mm diameter feet
+  feet_ring_outer_radius: 5.7
   feet_ring_height: 0.5
 
   battery_width: 12.0
@@ -720,14 +722,14 @@ outlines:
     top_plate_base:
       what: outline
       name: board_noround
-      # fillet: 1
+      fillet: 1
       expand: cs
   wall_outer:
     top_plate_base:
       what: outline
-      name: wall_inner
-      # fillet: 1
-      expand: ct
+      name: board_noround
+      fillet: 1
+      expand: cs + wt
   bottom:
     top_plate_base:
       what: outline
@@ -747,7 +749,7 @@ outlines:
       what: outline
       name: board_noround
       fillet: 1
-      expand: cs + ct
+      expand: cs + wt
     cutouts:
       what: rectangle
       where: true
@@ -758,12 +760,10 @@ outlines:
     outside:
       what: outline
       name: wall_outer
-      fillet: 1
     inside:
       what: outline
       name: wall_inner
       operation: subtract
-      fillet: 1
 
   l_usb_conn:
     box:
