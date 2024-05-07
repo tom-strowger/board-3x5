@@ -2,19 +2,31 @@
 
 ## Overview
 A keyboard built using ergogen etc.  36 keys wireless using the Seeed studio Xiao nRF52840 module.
+This keyboard project heavily borrows from a few similar projects
+- [triboard](https://github.com/tarneaux/triboard)
+- [TOTEM](https://github.com/GEIGEIGEIST/TOTEM)
+
+The main features of my board are:
+- Split
+- Wireless
+- 36 keys: 5 columns x 3 rows + 3 thumb keys on each side
+- Cherry MX switches with hotswap socket
+- Uses the cheaper/smaller nordic mcu instead of nice nano
+- The ergogen project generates two boards and cases (left and right)
+  - The boards are not flippable as the battery charger pads on the mcu would not be reachable
+
 
 ## Guides
 ### Prerequisites
-`node` is setup to be run on the system
+- `node` is setup to be run on the system
+- For building cases: `npm install @jscad/csg` (this is a deprecated package so must be installed explicitly)
 
-### How to build
-`./build`
+### How to generate the boards
+`./build` (watches files and rebuilds when source changes/)
+
 or
+
 `./build once`
 
-### How to convert the case to STL
-The generated case is in a [JSCAD](https://github.com/jscad/OpenJSCAD.org) format however it uses an old/outdated API that is no longer supported. "V1" of JSCAD must be used to convert it to STL
-#### Setup
-`npm install @jscad/csg` (this is a deprecated package so must be installed explicitly)
-#### Run
-`npx @jscad/cli@1 output/cases/top_case.jscad -of stla -o top_case.stl`
+### How to generate the cases
+`./build cases`
