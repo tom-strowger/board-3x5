@@ -15,6 +15,12 @@ The main features of my board are:
 - The ergogen project generates two boards and cases (left and right)
   - The boards are not flippable as the battery charger pads on the mcu would not be reachable
 
+## Images
+
+![top](images/top.jpg)
+
+![angle](images/angle.jpg)
+
 
 ## Guides
 ### Prerequisites
@@ -30,3 +36,7 @@ or
 
 ### How to generate the cases
 `./build cases`
+
+## TODO
+- Increase the heat set insert radius as it is set with CA glue insted of being melted in (when printing with SLA resin)
+- Add a printed part that slots over the switch and fits into the case allowing it to be easily comtrolled 
