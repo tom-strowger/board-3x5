@@ -1,4 +1,4 @@
-# My keyboard
+# Tom's 3x5 board
 
 ## Overview
 A keyboard built using ergogen etc.  36 keys wireless using the Seeed studio Xiao nRF52840 module.
